@@ -32,7 +32,9 @@ function preventDoubleMsg(input) {
     let $addMsg = $('#' + input.id);
     setTimeout(function () {
         $addMsg.attr('disabled', 'disabled');
+    }, 1000);
+    setTimeout(function () {
         $addMsg.attr('disabled', false);
-    }, 2000);
+    }, 1200);
 
 }
