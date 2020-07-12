@@ -57,11 +57,11 @@ public class PostMessageService implements MessageService {
 
     @Override
     public final List<Message> getAll(final String userName, final Post post) {
-        return this.message.findByUserNameAndPost(userName, post);
+        return this.message.findByAuthorAndPost(userName, post);
     }
 
     @Override
     public final Message findByPostAndMsgId(final Post post, final Integer id) {
-        return this.message.findByPostAndMsgId(post, id);
+        return this.message.findByPostAndId(post, id);
     }
 }

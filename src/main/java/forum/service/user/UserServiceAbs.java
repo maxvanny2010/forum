@@ -82,7 +82,7 @@ public abstract class UserServiceAbs {
      * @return user or null
      */
     public User getByName(final String name) {
-        return this.users.findUserByUsername(name);
+        return this.users.findByUsername(name);
     }
 
 }

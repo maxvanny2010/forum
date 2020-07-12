@@ -20,14 +20,11 @@ import java.util.List;
  */
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    @Query("select m FROM Message m WHERE m.post= ?1")
     List<Message> findByPost(Post post);
 
-    @Query("SELECT m FROM Message m WHERE m.author= ?1 AND m.post= ?2")
-    List<Message> findByUserNameAndPost(String userName, Post post);
+    List<Message> findByAuthorAndPost(String userName, Post post);
 
-    @Query("FROM Message m WHERE m.post= ?1 AND m.id= ?2")
-    Message findByPostAndMsgId(Post post, Integer idMsg);
+    Message findByPostAndId(Post post, Integer idMsg);
 
     @Transactional
     @Modifying

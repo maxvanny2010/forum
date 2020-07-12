@@ -19,6 +19,15 @@ import javax.sql.DataSource;
  */
 @SpringBootApplication
 public class Main extends SpringBootServletInitializer {
+    /**
+     * Method a pointer to program.
+     *
+     * @param args args
+     */
+    public static void main(final String[] args) {
+        SpringApplication.run(Main.class);
+    }
+
     @Override
     protected final SpringApplicationBuilder configure(
             final SpringApplicationBuilder application) {
@@ -31,14 +40,5 @@ public class Main extends SpringBootServletInitializer {
         liquibase.setChangeLog("classpath:liquibase-changeLog.xml");
         liquibase.setDataSource(ds);
         return liquibase;
-    }
-
-    /**
-     * Method a pointer to program.
-     *
-     * @param args args
-     */
-    public static void main(final String[] args) {
-        SpringApplication.run(Main.class);
     }
 }

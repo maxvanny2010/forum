@@ -46,12 +46,12 @@ public class PostAdminService implements PostService {
 
     @Override
     public final Post findByNameAndId(final String userName, final Integer id) {
-        return this.posts.findByUserNameAndId(userName, id);
+        return this.posts.findByAuthorAndId(userName, id);
     }
 
     @Override
     public final List<Post> getAll(final String userName) {
-        return this.posts.findByUserName(userName);
+        return this.posts.findByAuthor(userName);
     }
 
     /**
