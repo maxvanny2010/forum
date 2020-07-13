@@ -2,6 +2,7 @@ package forum.control;
 
 import forum.Main;
 import forum.model.Post;
+import forum.repository.PostRepository;
 import forum.service.post.PostUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,8 +19,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 
+import java.time.LocalDateTime;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertSame;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -39,6 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql(scripts = "classpath:schema.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class PostControllerTest {
     @MockBean
+    private PostRepository repository;
+    @Autowired
     private PostUserService service;
     @Autowired
     private MockMvc mockMvc;
@@ -48,55 +55,57 @@ public class PostControllerTest {
     public void shouldReturnDefaultMessage() throws Exception {
         final LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
         requestParams.add("description", "куплю С ради С");
-        requestParams.add("name", "C");
+        requestParams.add("name", "NEW");
         requestParams.add("names", "user");
         requestParams.add("date", "");
 
         this.mockMvc.perform(post("/create")
                 .params(requestParams))
-               // .param("names", "user")
-              //  .param("date", ""))
                 .andDo(print())
                 .andExpect(status().is3xxRedirection());
         final ArgumentCaptor<Post> argument = ArgumentCaptor.forClass(Post.class);
-        verify(this.service).add(argument.capture());
-        assertThat(argument.getValue().getName(), is("С"));
+        verify(this.repository).save(argument.capture());
+        final String actual = argument.getValue().getName();
+        assertSame("NEW", actual);
     }
 
     @Test
-    public void updateMessage() {
+    @WithMockUser
+    public void whenUpdatePostOk() throws Exception {
+        given(this.service.findByNameAndId("user", 1)).willReturn(
+                new Post(1, "A", "Куплю А ради А",
+                        LocalDateTime.of(3000, 1, 1, 0, 0),
+                        "user"));
+        final LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
+        requestParams.add("id", "1");
+        requestParams.add("description", "куплю С ради С");
+        requestParams.add("name", "UPDATE");
+        requestParams.add("authorPost", "user");
+        requestParams.add("date", "3000-10-10T11:11");
+        this.mockMvc.perform(post("/update")
+                .params(requestParams))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection());
+        final ArgumentCaptor<Post> argument = ArgumentCaptor.forClass(Post.class);
+        verify(this.repository).save(argument.capture());
+        final String actual = argument.getValue().getName();
+        assertSame("UPDATE", actual);
     }
 
     @Test
-    public void deleteMessage() {
-    }
-
-    @Test
-    public void createMessage() {
-    }
-
-    @Test
-    public void move404() {
-    }
-
-    @Test
-    public void moveToCreate() {
-    }
-
-    @Test
-    public void update() {
-    }
-
-    @Test
-    public void testUpdate() {
-    }
-
-    @Test
-    public void create() {
-    }
-
-    @Test
-    public void remove() {
+    @WithMockUser
+    public void whenRemovePostOk() throws Exception {
+        given(this.service.findByNameAndId("user", 1)).willReturn(
+                new Post(1, "A", "Куплю А ради А",
+                        LocalDateTime.of(3000, 1, 1, 0, 0),
+                        "user"));
+        this.mockMvc.perform(post("/remove")
+                .param("id", "1")
+                .param("postAuthor", "user"))
+                .andDo(print())
+                .andExpect(status().is3xxRedirection());
+        final ArgumentCaptor<Post> argument = ArgumentCaptor.forClass(Post.class);
+        verify(this.repository).delete(argument.capture());
     }
 }
 

@@ -231,7 +231,7 @@ public class PostController {
 
     @PostMapping("/remove")
     public final String remove(@RequestParam(value = "id") final Integer id,
-                               @RequestParam(value = "authorPostUpdate") final String authorPost) {
+                               @RequestParam(value = "postAuthor") final String authorPost) {
         final String name = this.getAuthorityName();
         final boolean isAdmin = Objects.equals("admin", name);
         if (this.isNames(authorPost, name) || isAdmin) {

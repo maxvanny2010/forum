@@ -1,5 +1,5 @@
 language: java
-jdk: openjdk11
+jdk: openjdk14
 
 sudo: false
 
@@ -8,6 +8,8 @@ services:
 
 before_script:
   - psql -c 'create database forum;' -U postgres
+
+install: true
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -18,3 +20,8 @@ notifications:
       - david.klarson@mail.ru
     on_success: never
     on_failure: always
+
+env:
+  global:
+  - CODECOV_TOKEN=:65da3349-cefd-4501-aa07-71efca6361f7
+
