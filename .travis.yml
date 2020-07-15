@@ -24,10 +24,6 @@ notifications:
     on_success: never
     on_failure: always
 
-env:
-  global:
-  - CODECOV_TOKEN=:65da3349-cefd-4501-aa07-71efca6361f7
-
 deploy:
   provider: heroku
   api_key:

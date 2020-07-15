@@ -21,8 +21,6 @@ import org.springframework.util.LinkedMultiValueMap;
 
 import java.time.LocalDateTime;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertSame;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -52,7 +50,7 @@ public class PostControllerTest {
 
     @Test
     @WithMockUser
-    public void shouldReturnDefaultMessage() throws Exception {
+    public void shouldReturnDefaultPost() throws Exception {
         final LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
         requestParams.add("description", "куплю С ради С");
         requestParams.add("name", "NEW");

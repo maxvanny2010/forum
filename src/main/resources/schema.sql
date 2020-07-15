@@ -60,9 +60,9 @@ values ('admin', '$2a$10$xgd7DC3.fpquD6blnjPBUuGmICZ2dEIblENDO6EnVY.sum0y2b8Wi',
         (select id_authority from authorities where authority = 'ROLE_USER')),
        ('any', '$2a$10$xgd7DC3.fpquD6blnjPBUuGmICZ2dEIblENDO6EnVY.sum0y2b8Wi',
         (select id_authority from authorities where authority = 'ROLE_USER'));
-insert into post(name, description, author)
-values ('A', 'куплю А ради А', 'user'),
-       ('B', 'куплю B ради B', 'any');
+insert into post(name, description, author, created)
+values ('A', 'куплю А ради А', 'user', '2020-07-13 13:09'),
+       ('B', 'куплю B ради B', 'any', '2020-07-13 13:10');
 insert into message(description, author, post_id, created)
 values ('хочу купить А', 'user', 1, '2020-06-29 09:09:02'),
        ('не хочу купить А', 'any', 1, '2020-06-29 09:09:03'),
