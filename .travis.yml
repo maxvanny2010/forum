@@ -3,13 +3,16 @@ jdk: openjdk14
 
 sudo: false
 
+install: true
+
+script: mvn clean package -DskipTests=true
+
 services:
   - postgresql
 
 before_script:
   - psql -c 'create database forum;' -U postgres
 
-install: true
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -23,5 +26,10 @@ notifications:
 
 env:
   global:
-  - CODECOV_TOKEN="65da3349-cefd-4501-aa07-71efca6361f7"
+  - CODECOV_TOKEN=:65da3349-cefd-4501-aa07-71efca6361f7
 
+deploy:
+  provider: heroku
+  api_key:
+    secure: L1PX8fVzVIS9Dt05/Nr3lwWvZmLdcIlleTSqG7JGpBKie+OmBll9cium0dkaV1HV6kX9Hq5dzQwe6bmaW2weNEGsvOfntSOfRt5XEaYuzVXnJ6CoSd5nm60tiQGDOn5hLMHN2KUvYWx/VzQkYvT87YnMaNP8M/UlRpX7LJWOe2HIjIb/WEIvflx8utQXHztNCD1onIj3Kzvx20eT/HWaGBQKwB6GPJCHFY9eZImJYQsAUPRDjSULGdk7UFJ/jSWU1gfbecZhZWDQw2uQ0tZ+dk0fEcNeObhDMoY7oXw7+SP2+zr4M+8K/SvnK+hPztj+qZFtiucK/njSy6xFL7By1oKOqu8znKf0UTGkysf+5fqSffxbXLRzRSV9YEsbOfUdYg7kasCUpurlpQUPNZyqdi7To27MfJuh2jCjD7/JJ37qrywu4YLyPpsg8aa1rBi/eQ0MA7AlGPafRAcriYs1qPCZfdekOBrbVrtr04m6lLlWHViH75AfDydGlC+tIIt9jz/WR0o3NZqOLzge3u6WoXQGNVulAWmfZ+5ySkQVSKhACA16VRhxMKlZuhLkvtdSE3XGO9hXa0/Kho5p3hZPzfqbTDb3Bi0RPHyvJeFxw1HeqSsGGXgHV3VaZ+QoK0ShEM7bhqnXxTy/JkUsdpi/JIKkQLwC4tDkemLzjB2Lmx0=
+  app: miforum
