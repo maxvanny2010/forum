@@ -92,7 +92,7 @@
                                            value="${message.description}">
                                     <input type="button" id="${post.id}_${message.id}_${name}_${post.author}"
                                            onclick="prepareUpdate(this)"
-                                           value="обновить_${post.id}_${message.id}_${name}_${post.author}"
+                                           value="обновить"
                                            style="font-size: smaller; border-color: white; background-color: cadetblue;
                                        color: black">
                                 </form>

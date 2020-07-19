@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -39,10 +38,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @since 7/3/2020
  */
 @RunWith(SpringRunner.class)
-@TestPropertySource("classpath:application.properties")
 @SpringBootTest(classes = Main.class)
 @AutoConfigureMockMvc
-@Sql(scripts = "classpath:schema.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MessagePostControllerTest {
     @MockBean
     private PostRepository posts;

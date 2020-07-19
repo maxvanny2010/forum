@@ -20,7 +20,7 @@ after_success:
 notifications:
   email:
     recipients:
-      - david.klarson@mail.ru
+      - david.klarson@mail.com
     on_success: never
     on_failure: always
 
