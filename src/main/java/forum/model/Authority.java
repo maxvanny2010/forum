@@ -1,12 +1,13 @@
 package forum.model;
 
+import org.hibernate.Hibernate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Objects;
 
 /**
  * Authority.
@@ -21,18 +22,18 @@ public class Authority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_authority")
-    private int id;
+    private Long id;
 
     private String authority;
 
     public Authority() {
     }
 
-    public int getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(final int aId) {
+    public void setId(final Long aId) {
         this.id = aId;
     }
 
@@ -49,16 +50,15 @@ public class Authority {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Authority)) {
+        if (o == null || !getClass().equals(Hibernate.getClass(o))) {
             return false;
         }
-        final Authority authority1 = (Authority) o;
-        return getId() == authority1.getId()
-                && getAuthority().equals(authority1.getAuthority());
+        final Authority that = (Authority) o;
+        return this.getId() != null && this.getId().equals(that.getId());
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(getId(), getAuthority());
+        return (int) (this.getId() == null ? 0 : this.getId());
     }
 }

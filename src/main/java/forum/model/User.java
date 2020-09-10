@@ -1,8 +1,11 @@
 package forum.model;
 
+import org.hibernate.Hibernate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,50 +25,25 @@ import java.util.StringJoiner;
 @Entity
 @Table(name = "users")
 public class User {
-    /**
-     * field a id.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_user")
-    private Integer id;
+    private Long id;
 
-    /**
-     * field a user name.
-     */
     private String username;
-    /**
-     * field a password.
-     */
     private String password;
-
-    /**
-     * field a password.
-     */
     private boolean enable;
 
-    /**
-     * field a role.
-     */
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "authority_id", nullable = false)
+    @JoinColumn(name = "authority_id",
+            foreignKey = @ForeignKey(name = "authority_id_fk"),
+            nullable = false)
     private Authority authority;
 
-    /**
-     * Constructor.
-     */
     public User() {
     }
 
-    /**
-     * Constructor.
-     *
-     * @param aId        id
-     * @param aUsername  user name
-     * @param aPassword  password
-     * @param aAuthority a authority
-     */
-    public User(final Integer aId, final String aUsername,
+    public User(final Long aId, final String aUsername,
                 final String aPassword, final Authority aAuthority) {
         this.id = aId;
         this.username = aUsername;
@@ -73,92 +51,42 @@ public class User {
         this.authority = aAuthority;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return enable
-     */
     public boolean isEnable() {
         return this.enable;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aEnable a enable of user
-     **/
     public void setEnable(final boolean aEnable) {
         this.enable = aEnable;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return id
-     */
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aId a id
-     **/
-    public void setId(final Integer aId) {
+    public void setId(final Long aId) {
         this.id = aId;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return a user name
-     */
     public String getUsername() {
         return this.username;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aUsername a user name
-     **/
     public void setUsername(final String aUsername) {
         this.username = aUsername;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return password
-     */
     public String getPassword() {
         return this.password;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aPassword a password
-     **/
     public void setPassword(final String aPassword) {
         this.password = aPassword;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return a authority
-     */
     public Authority getAuthority() {
         return this.authority;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aAuthority a authority
-     **/
     public void setAuthority(final Authority aAuthority) {
         this.authority = aAuthority;
     }
@@ -168,14 +96,11 @@ public class User {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof User)) {
+        if (o == null || !getClass().equals(Hibernate.getClass(o))) {
             return false;
         }
-        final User user = (User) o;
-        return getId().equals(user.getId())
-                && getUsername().equals(user.getUsername())
-                && getPassword().equals(user.getPassword())
-                && getAuthority() == user.getAuthority();
+        User that = (User) o;
+        return this.getId() != null && this.getId().equals(that.getId());
     }
 
     /**
@@ -183,13 +108,13 @@ public class User {
      *
      * @return result
      */
-    public boolean isNew() {
+    public final boolean isNew() {
         return Objects.isNull(this.id);
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(getId(), getUsername(), getPassword(), getAuthority());
+        return (int) (this.getId() == null ? 0 : this.getId());
     }
 
     @Override

@@ -1,5 +1,7 @@
 package forum.model;
 
+import org.hibernate.Hibernate;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,54 +26,23 @@ import java.util.StringJoiner;
  */
 @Entity
 @Table(name = "post")
-public class Post extends AbstractEntity<Integer> {
-    /**
-     * field a id.
-     */
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_post")
-    private Integer id;
-    /**
-     * field a name.
-     */
+    private Long id;
     private String name;
-    /**
-     * field a description.
-     */
     private String description;
-
-    /**
-     * field a time to create.
-     */
     private LocalDateTime created;
-
-    /**
-     * field a author.
-     */
     private String author;
-    /**
-     * field a messages.
-     */
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL,
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL,
             mappedBy = "post")
     private Set<Message> messages = new HashSet<>();
 
-    /**
-     * Constructor.
-     */
     public Post() {
     }
 
-    /**
-     * Constructor.
-     *
-     * @param aId      id
-     * @param aName    name
-     * @param aDesc    description
-     * @param aCreated create date and time
-     */
-    public Post(final Integer aId, final String aName, final String aDesc,
+    public Post(final Long aId, final String aName, final String aDesc,
                 final LocalDateTime aCreated, final String aAuthor) {
         this.id = aId;
         this.name = aName;
@@ -88,111 +59,47 @@ public class Post extends AbstractEntity<Integer> {
         this.messages = messages;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return author
-     */
     public String getAuthor() {
         return this.author;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aAuthor a author
-     **/
     public void setAuthor(final String aAuthor) {
         this.author = aAuthor;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return id
-     */
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aId id
-     */
-    public void setId(final Integer aId) {
+    public void setId(final Long aId) {
         this.id = aId;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aId id
-     **/
-    public void setId(final int aId) {
-        this.id = aId;
-    }
-
-    /**
-     * Method to get.
-     *
-     * @return name
-     */
     public String getName() {
         return this.name;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aName name of post
-     **/
     public void setName(final String aName) {
         this.name = aName;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return description
-     */
     public String getDescription() {
         return this.description;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aDesc description
-     **/
     public void setDescription(final String aDesc) {
         this.description = aDesc;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return a time of create
-     */
     public LocalDateTime getCreated() {
         return this.created;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aCreated created
-     **/
     public void setCreated(final LocalDateTime aCreated) {
         this.created = aCreated;
     }
 
-    /**
-     * Method to check post.
-     *
-     * @return is new post or not
-     */
-    public boolean isNew() {
+    public final boolean isNew() {
         return Objects.isNull(this.id);
     }
 
@@ -201,21 +108,16 @@ public class Post extends AbstractEntity<Integer> {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Post)) {
+        if (o == null || !getClass().equals(Hibernate.getClass(o))) {
             return false;
         }
-        final Post post = (Post) o;
-        return Objects.equals(getId(), post.getId())
-                && Objects.equals(getName(), post.getName())
-                && Objects.equals(getDescription(), post.getDescription())
-                && Objects.equals(getCreated(), post.getCreated())
-                && Objects.equals(getAuthor(), post.getAuthor());
+        final Post that = (Post) o;
+        return this.getId() != null && this.getId().equals(that.getId());
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(getId(), getName(), getDescription(),
-                getCreated(), getAuthor());
+        return (int) (this.getId() == null ? 0 : this.getId());
     }
 
     @Override
@@ -227,7 +129,7 @@ public class Post extends AbstractEntity<Integer> {
                 .add("description='" + this.description + "'")
                 .add("created=" + this.created)
                 .add("author=" + this.author)
-                .add("messages=" + this.messages)
+                //.add("messages=" + this.messages)
                 .toString();
     }
 }

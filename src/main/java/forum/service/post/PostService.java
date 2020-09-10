@@ -1,56 +1,82 @@
 package forum.service.post;
 
 import forum.model.Post;
+import forum.repository.PostRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 /**
- * PostServiceAbs.
+ * PostService.
  *
  * @author Maxim Vanny
  * @version 5.0
- * @since 6/17/2020
+ * @since 6/16/2020
  */
-public interface PostService {
+@Service
+public class PostService {
+    private final PostRepository posts;
 
+    public PostService(final PostRepository aPosts) {
+        this.posts = aPosts;
+    }
 
-    /**
-     * Method to add post.
-     *
-     * @param post a post
-     * @return new post or null
-     */
-    Post add(Post post);
+    public final Post add(final Post post) {
+        return this.posts.save(post);
+    }
 
-    /**
-     * Method to get by id.
-     *
-     * @param userName a name author of post
-     * @param id       id by post
-     * @return post or null
-     */
-    Post findByNameAndId(String userName, Integer id);
+    public final Post update(final Post post) {
+        return this.posts.save(post);
+    }
 
-    /**
-     * Method to update.
-     *
-     * @param post a post for update
-     * @return update post or null
-     */
-    Post update(Post post);
+    public final void delete(final Post post) {
+        this.posts.delete(post);
+    }
 
-    /**
-     * Method to delete post.
-     *
-     * @param post a id of post
-     */
-    void delete(Post post);
+    public final Post findByNameAndId(final String userName, final Long id) {
+        return this.posts.findByAuthorAndId(userName, id);
+    }
+    public final Optional<Post> findBydId(final Long id) {
+        return this.posts.findById(id);
+    }
 
-    /**
-     * Method to get all post by user.
-     *
-     * @param userName name of user
-     * @return list of post by user
-     */
-    List<Post> getAll(String userName);
+    public final List<Post> getAll(final String userName) {
+        return this.posts.findByAuthor(userName);
+    }
+
+    public final List<Post> getAll() {
+        return this.posts.findAll();
+    }
+
+    public void createPost(@ModelAttribute final Post posts,
+                           @RequestParam("date") final String date,
+                           final String name) {
+        final Post post = new Post();
+        final LocalDateTime dateTime = date.isEmpty()
+                ? LocalDateTime.now()
+                : LocalDateTime.parse(date);
+        post.setAuthor(name);
+        post.setCreated(dateTime);
+        post.setDescription(posts.getDescription());
+        post.setMessages(new HashSet<>());
+        post.setName(posts.getName());
+        this.posts.save(post);
+    }
+
+    public void updatePost(@ModelAttribute final Post posts) {
+        this.posts.findById(posts.getId()).ifPresent(post -> {
+            post.setCreated(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
+            post.setName(posts.getName());
+            post.setDescription(posts.getDescription());
+            this.posts.save(post);
+        });
+    }
+
 }

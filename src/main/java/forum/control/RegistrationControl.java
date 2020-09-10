@@ -21,14 +21,8 @@ import java.util.Objects;
  */
 @Controller
 public class RegistrationControl {
-    /**
-     * field a user.
-     */
     private final UserService user;
     private final AuthorityRepository authority;
-    /**
-     * field a encoder.
-     */
     private final PasswordEncoder encoder;
 
     public RegistrationControl(final UserService aUser,

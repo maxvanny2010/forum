@@ -102,7 +102,6 @@
                         <form action="<spring:url value="/remove"/>" method="POST" title="удалить">
                             <input name="action" type="hidden" value="remove"/>
                             <input name="id" type="hidden" value="${post.id}"/>
-                            <input name="postAuthor" type="hidden" value="${post.author}"/>
                             <input class="btn btn-info btn-sm"
                                    style="background-color:dodgerblue; border-color:white; color: white;
                                    border-radius: 0;"

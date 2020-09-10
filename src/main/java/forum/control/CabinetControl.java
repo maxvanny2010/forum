@@ -1,12 +1,13 @@
 package forum.control;
 
-import forum.service.post.PostAdminService;
 import forum.service.post.PostService;
-import forum.service.post.PostUserService;
+import forum.service.user.util.Util;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Objects;
 
 /**
  * CabinetControl.
@@ -17,54 +18,35 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class CabinetControl {
-    /**
-     * field a service user.
-     */
-    private final PostService postUser;
-    /**
-     * field a service admin.
-     */
-    private final PostAdminService postAdmin;
+    private final PostService posts;
 
-    /**
-     * Constructor.
-     *
-     * @param aPostsAdmin admin
-     * @param aPostsUser  user
-     */
-    public CabinetControl(final PostUserService aPostsUser,
-                          final PostAdminService aPostsAdmin) {
-        this.postUser = aPostsUser;
-        this.postAdmin = aPostsAdmin;
+    public CabinetControl(final PostService aPosts) {
+        this.posts = aPosts;
     }
 
-    /**
-     * Method  to get.
-     *
-     * @param name  a name
-     * @param model a model
-     * @return page
-     */
     @GetMapping("/cabinet/user")
     public String cabinetUser(@RequestParam(value = "name") final String name,
                               final Model model) {
-        model.addAttribute("posts", this.postUser.getAll(name));
-        model.addAttribute("name", name);
-        return "cabinet";
+        final String authorityName = Util.getAuthorityName();
+        if (Objects.equals(authorityName, name)) {
+            model.addAttribute("posts", this.posts.getAll(name));
+            model.addAttribute("name", name);
+            return "cabinet";
+        }
+        return "redirect:/404";
     }
 
-    /**
-     * Method  to get.
-     *
-     * @param name  a name
-     * @param model a model
-     * @return page
-     */
     @GetMapping("/cabinet/admin")
-    public String cabinet(@RequestParam(value = "name") final String name,
-                          final Model model) {
-        model.addAttribute("posts", this.postAdmin.getAll());
-        model.addAttribute("name", name);
-        return "cabinet";
+    public String cabinetAdmin(@RequestParam(value = "name") final String name,
+                               final Model model) {
+        final String authorityName = Util.getAuthorityName();
+        final boolean isName = Objects.equals(authorityName, name);
+        final boolean isAdmin = Objects.equals("admin", name);
+        if (isName && isAdmin) {
+            model.addAttribute("posts", this.posts.getAll());
+            model.addAttribute("name", name);
+            return "cabinet";
+        }
+        return "redirect:/404";
     }
 }

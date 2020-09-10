@@ -19,11 +19,6 @@ import javax.sql.DataSource;
  */
 @SpringBootApplication
 public class Main extends SpringBootServletInitializer {
-    /**
-     * Method a pointer to program.
-     *
-     * @param args args
-     */
     public static void main(final String[] args) {
         SpringApplication.run(Main.class);
     }

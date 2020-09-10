@@ -1,6 +1,6 @@
 package forum.control;
 
-import forum.service.post.PostAdminService;
+import forum.service.post.PostService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -16,26 +16,12 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class IndexControl {
-    /**
-     * field a service post.
-     */
-    private final PostAdminService posts;
+    private final PostService posts;
 
-    /**
-     * Constructor.
-     *
-     * @param aService service
-     */
-    public IndexControl(final PostAdminService aService) {
-        this.posts = aService;
+    public IndexControl(final PostService aPost) {
+        this.posts = aPost;
     }
 
-    /**
-     * Method to get all posts.
-     *
-     * @param model model
-     * @return index page
-     */
     @GetMapping({"/", "/forum"})
     public String index(final Model model) {
         final Authentication auth = SecurityContextHolder.getContext()

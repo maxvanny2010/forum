@@ -77,7 +77,6 @@
                                     <input type="hidden" name="idPostD" value="${post.id}">
                                     <input type="hidden" name="authorPostD" value="${post.author}">
                                     <input type="hidden" name="idMsgD" value="${message.id}">
-                                    <input type="hidden" name="namesD" value="${name}">
                                     <input type="submit" value="удалить"
                                            style="font-size: smaller; border-color: white; background-color: cadetblue;
                                        color: black">

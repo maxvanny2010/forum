@@ -50,8 +50,6 @@
                 <form name="${action eq 'create'? 'create': 'update'}"
                       id="${action eq 'create'? 'create': 'update'}"
                       action="<spring:url value="/${action eq 'create'? 'create': 'update'}"/>" method='POST'>
-                    <input type="hidden" name="authorPost" value="${post.author}">
-                    <input type="hidden" name="names" value="${name}">
                     <c:if test="${action eq 'update'}">
                         <input type="hidden" name="id" value="${post.id}">
                     </c:if>

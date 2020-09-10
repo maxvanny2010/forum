@@ -17,5 +17,5 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByAuthor(String userName);
 
-    Post findByAuthorAndId(String userName, Integer id);
+    Post findByAuthorAndId(String userName, Long id);
 }

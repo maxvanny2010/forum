@@ -48,7 +48,7 @@ public class IndexControlTest {
     }
 
     @Test
-    @WithMockUser
+    @WithMockUser(username = "admin", password = "secret")
     public void shouldReturnCabinetAdmin() throws Exception {
         this.mockMvc.perform(get("/cabinet/admin?name=admin"))
                 .andDo(print())

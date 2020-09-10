@@ -15,17 +15,9 @@ import org.springframework.web.servlet.view.JstlView;
  */
 @Configuration
 public class WebConfig {
-    /**
-     * Constructor.
-     */
     public WebConfig() {
     }
 
-    /**
-     * Method to a view resolver.
-     *
-     * @return bean
-     */
     @Bean
     public ViewResolver viewResolver() {
         final InternalResourceViewResolver bean =

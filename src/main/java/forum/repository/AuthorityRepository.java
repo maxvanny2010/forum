@@ -10,6 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @version 5.0
  * @since 7/1/2020
  */
-public interface AuthorityRepository extends JpaRepository<Authority, Integer> {
+public interface AuthorityRepository extends JpaRepository<Authority, Long> {
     Authority findByAuthority(String authority);
 }

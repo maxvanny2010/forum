@@ -3,7 +3,7 @@ package forum.control;
 import forum.Main;
 import forum.model.Post;
 import forum.repository.PostRepository;
-import forum.service.post.PostUserService;
+import forum.service.post.PostService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -12,8 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
@@ -41,7 +39,7 @@ public class PostControllerTest {
     @MockBean
     private PostRepository repository;
     @Autowired
-    private PostUserService service;
+    private PostService service;
     @Autowired
     private MockMvc mockMvc;
 
@@ -67,8 +65,8 @@ public class PostControllerTest {
     @Test
     @WithMockUser
     public void whenUpdatePostOk() throws Exception {
-        given(this.service.findByNameAndId("user", 1)).willReturn(
-                new Post(1, "A", "Куплю А ради А",
+        given(this.service.findByNameAndId("user", 1L)).willReturn(
+                new Post(1L, "A", "Куплю А ради А",
                         LocalDateTime.of(3000, 1, 1, 0, 0),
                         "user"));
         final LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
@@ -90,8 +88,8 @@ public class PostControllerTest {
     @Test
     @WithMockUser
     public void whenRemovePostOk() throws Exception {
-        given(this.service.findByNameAndId("user", 1)).willReturn(
-                new Post(1, "A", "Куплю А ради А",
+        given(this.service.findByNameAndId("user", 1L)).willReturn(
+                new Post(1L, "A", "Куплю А ради А",
                         LocalDateTime.of(3000, 1, 1, 0, 0),
                         "user"));
         this.mockMvc.perform(post("/remove")

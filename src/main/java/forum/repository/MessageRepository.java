@@ -24,7 +24,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     List<Message> findByAuthorAndPost(String userName, Post post);
 
-    Message findByPostAndId(Post post, Integer idMsg);
+    Message findByPostAndId(Post post, Long idMsg);
 
     @Transactional
     @Modifying

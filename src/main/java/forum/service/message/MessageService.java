@@ -2,73 +2,62 @@ package forum.service.message;
 
 import forum.model.Message;
 import forum.model.Post;
+import forum.repository.MessageRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * MessageService.
+ * PostMessageService.
  *
  * @author Maxim Vanny
  * @version 5.0
  * @since 6/21/2020
  */
-public interface MessageService {
-    /**
-     * Method to add.
-     *
-     * @param message a message
-     * @return a new message
-     */
-    Message add(Message message);
+@Service
+public class MessageService {
+    private final MessageRepository message;
+    public MessageService(final MessageRepository aMessages) {
+        this.message = aMessages;
+    }
 
-    /**
-     * Method to get by id.
-     *
-     * @param id a id
-     * @return message
-     */
-    Message getById(Integer id);
+    public final Message add(final Message message) {
+        return this.message.save(message);
+    }
 
-    /**
-     * Method to delete.
-     *
-     * @param post a post
-     * @param msg  a message
-     */
-    void delete(Post post, Message msg);
+    public final Message update(final Message message) {
+        return this.message.save(message);
+    }
 
-    /**
-     * Method to update.
-     *
-     * @param message a message
-     * @return a new message
-     */
-    Message update(Message message);
+    public final void delete(final Post post, final Message msg) {
+        this.message.deleteByPostAndMsg(post, msg);
+    }
 
-    /**
-     * Method to get.
-     *
-     * @param post a id of post
-     * @return all messages
-     */
+    public final Message getById(final Long id) {
+        return this.message.findById(id).orElse(null);
+    }
 
-    List<Message> getAll(Post post);
+    public final List<Message> getAll(final Post post) {
+        return this.message.findByPost(post);
+    }
 
-    /**
-     * Method to get.
-     *
-     * @param userName a id of post
-     * @param post     a id of post
-     * @return all messages
-     */
-    List<Message> getAll(String userName, Post post);
+    public final List<Message> getAll(final String userName, final Post post) {
+        return this.message.findByAuthorAndPost(userName, post);
+    }
 
-    /**
-     * Method to get.
-     *
-     * @param post a id of post
-     * @param id   a id of message
-     * @return message
-     */
-    Message findByPostAndMsgId(Post post, Integer id);
+    public final Message findByPostAndMsgId(final Post post, final Long id) {
+        return this.message.findByPostAndId(post, id);
+    }
+    public void createMessage(@RequestParam("message") final String msg,
+                              final String name,
+                              final Post post) {
+        final Message message = new Message();
+        message.setDescription(msg.trim());
+        message.setAuthor(name);
+        message.setCreated(LocalDateTime.now());
+        message.setPost(post);
+        this.add(message);
+    }
 }

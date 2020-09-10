@@ -1,5 +1,7 @@
 package forum.model;
 
+import org.hibernate.Hibernate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,52 +25,25 @@ import java.util.StringJoiner;
  */
 @Entity
 @Table(name = "message")
-public class Message extends AbstractEntity<Integer> {
-    /**
-     * field a id.
-     */
+public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_message")
-    private Integer id;
-    /**
-     * field a description.
-     */
+    private Long id;
     private String description;
-    /**
-     * field a time of create.
-     */
     private LocalDateTime created;
-
-    /**
-     * field a author.
-     */
     private String author;
 
-    /**
-     * field a post.
-     */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id",
             foreignKey = @ForeignKey(name = "post_id_fk"),
             nullable = false)
     private Post post;
 
-    /**
-     * Constructor.
-     */
     public Message() {
     }
 
-    /**
-     * Constructor.
-     *
-     * @param aId       id
-     * @param aDesc     description
-     * @param aDateTime date and time a create
-     * @param aAuthor   a author
-     */
-    public Message(final Integer aId, final String aDesc,
+    public Message(final Long aId, final String aDesc,
                    final LocalDateTime aDateTime,
                    final String aAuthor) {
         this.id = aId;
@@ -85,83 +60,38 @@ public class Message extends AbstractEntity<Integer> {
         this.post = post;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return author
-     */
     public String getAuthor() {
         return this.author;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aAuthor a author
-     **/
     public void setAuthor(final String aAuthor) {
         this.author = aAuthor;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return id
-     */
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aId id
-     **/
-    public void setId(final Integer aId) {
+    public void setId(final Long aId) {
         this.id = aId;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return description
-     */
     public String getDescription() {
         return this.description;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aDesc description
-     **/
     public void setDescription(final String aDesc) {
         this.description = aDesc;
     }
 
-    /**
-     * Method to get.
-     *
-     * @return date and time
-     */
     public LocalDateTime getCreated() {
         return this.created;
     }
 
-    /**
-     * Method to set.
-     *
-     * @param aDateTime date and time create
-     **/
     public void setCreated(final LocalDateTime aDateTime) {
         this.created = aDateTime;
     }
 
-    /**
-     * Method to check post.
-     *
-     * @return is new post or not
-     */
     public boolean isNew() {
         return Objects.isNull(this.id);
     }
@@ -182,18 +112,15 @@ public class Message extends AbstractEntity<Integer> {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Message)) {
+        if (o == null || !getClass().equals(Hibernate.getClass(o))) {
             return false;
         }
-        final Message message = (Message) o;
-        return Objects.equals(getId(), message.getId())
-                && Objects.equals(getDescription(), message.getDescription())
-                && Objects.equals(getCreated(), message.getCreated())
-                && Objects.equals(getAuthor(), message.getAuthor());
+        final Message that = (Message) o;
+        return this.getId() != null && this.getId().equals(that.getId());
     }
 
     @Override
     public final int hashCode() {
-        return Objects.hash(getId(), getDescription(), getCreated(), getAuthor());
+        return (int) (this.getId() == null ? 0 : this.getId());
     }
 }

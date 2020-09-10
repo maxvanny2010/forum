@@ -6,7 +6,7 @@ import forum.model.Post;
 import forum.repository.MessageRepository;
 import forum.repository.PostRepository;
 import forum.service.message.MessageService;
-import forum.service.post.PostUserService;
+import forum.service.post.PostService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -15,8 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
@@ -40,13 +38,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Main.class)
 @AutoConfigureMockMvc
-public class MessagePostControllerTest {
+public class MessageControllerTest {
     @MockBean
     private PostRepository posts;
     @MockBean
     private MessageRepository messages;
     @Autowired
-    private PostUserService service;
+    private PostService service;
     @Autowired
     private MessageService serviceMsg;
     @Autowired
@@ -55,8 +53,8 @@ public class MessagePostControllerTest {
     @Test
     @WithMockUser
     public void whenCreateMessageIsOk() throws Exception {
-        given(this.service.findByNameAndId("user", 1)).willReturn(
-                new Post(1, "A", "Куплю А ради А",
+        given(this.service.findByNameAndId("user", 1L)).willReturn(
+                new Post(1L, "A", "Куплю А ради А",
                         LocalDateTime.of(2020, 7, 13, 13, 9),
                         "user"));
         final LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
@@ -76,14 +74,14 @@ public class MessagePostControllerTest {
     @Test
     @WithMockUser
     public void whenUpdateMessageOk() throws Exception {
-        final Post post = new Post(1, "A", "Куплю А ради А",
+        final Post post = new Post(1L, "A", "Куплю А ради А",
                 LocalDateTime.of(2020, 7, 13, 13, 9),
                 "user");
-        final Message msg = new Message(1, "Куплю UPDATE ради А",
+        final Message msg = new Message(1L, "Куплю UPDATE ради А",
                 LocalDateTime.of(2020, 7, 13, 13, 9),
                 "user");
-        given(this.service.findByNameAndId("user", 1)).willReturn(post);
-        given(this.serviceMsg.findByPostAndMsgId(post, 1)).willReturn(msg);
+        given(this.service.findByNameAndId("user", 1L)).willReturn(post);
+        given(this.serviceMsg.findByPostAndMsgId(post, 1L)).willReturn(msg);
         final LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
         requestParams.add("idMsgUpdate", "1");
         requestParams.add("idMsgPostUpdate", "1");
@@ -103,14 +101,14 @@ public class MessagePostControllerTest {
     @Test
     @WithMockUser
     public void whenRemoveMessageOk() throws Exception {
-        final Message msg = new Message(1, "DELETE",
+        final Message msg = new Message(1L, "DELETE",
                 LocalDateTime.of(2020, 7, 13, 13, 9),
                 "user");
-        final Post post = new Post(1, "A", "Куплю А ради А",
+        final Post post = new Post(1L, "A", "Куплю А ради А",
                 LocalDateTime.of(2020, 7, 13, 13, 9),
                 "user");
-        given(this.service.findByNameAndId("user", 1)).willReturn(post);
-        given(this.serviceMsg.findByPostAndMsgId(post, 1)).willReturn(msg);
+        given(this.service.findByNameAndId("user", 1L)).willReturn(post);
+        given(this.serviceMsg.findByPostAndMsgId(post, 1L)).willReturn(msg);
         final LinkedMultiValueMap<String, String> requestParams = new LinkedMultiValueMap<>();
         requestParams.add("idMsgD", "1");
         requestParams.add("idPostD", "1");

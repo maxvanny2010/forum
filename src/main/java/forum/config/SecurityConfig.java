@@ -23,9 +23,6 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    /**
-     * field a data source.
-     */
     private final DataSource ds;
 
     public SecurityConfig(@Qualifier("dataSource") final DataSource aDs) {
@@ -46,11 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authoritiesByUsernameQuery(authority);
     }
 
-    /**
-     * Method to get.
-     *
-     * @return encoder
-     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

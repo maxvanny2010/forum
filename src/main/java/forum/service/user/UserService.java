@@ -4,6 +4,8 @@ import forum.model.User;
 import forum.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * UserService.
  *
@@ -12,33 +14,35 @@ import org.springframework.stereotype.Service;
  * @since 6/17/2020
  */
 @Service
-public class UserService extends UserServiceAbs {
-    /**
-     * Constructor.
-     *
-     * @param aUsers users repo
-     */
+public class UserService {
+    private final UserRepository users;
+
     public UserService(final UserRepository aUsers) {
-        super(aUsers);
+        this.users = aUsers;
     }
 
-    @Override
-    public final User add(final User user) {
-        return super.add(user);
+    public User add(final User user) {
+        return this.users.save(user);
     }
 
-    @Override
-    public final User update(final User user) {
-        return super.update(user);
+    public final User get(final Long id) {
+        return this.users.findById(id).orElse(null);
     }
 
-    @Override
-    public final void delete(final User user) {
-        super.delete(user);
+    public User update(final User user) {
+        return this.users.save(user);
     }
 
-    @Override
-    public final User getByName(final String name) {
-        return super.getByName(name);
+    public void delete(final User user) {
+        this.users.delete(user);
     }
+
+    public List<User> getAll() {
+        return this.users.findAll();
+    }
+
+    public User getByName(final String name) {
+        return this.users.findByUsername(name);
+    }
+
 }

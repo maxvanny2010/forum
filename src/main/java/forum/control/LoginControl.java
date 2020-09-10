@@ -30,30 +30,21 @@ public class LoginControl {
             final Model model) {
         String errorMessage = null;
         if (Objects.nonNull(error)) {
-            errorMessage = "is incorrect";
+            errorMessage = "    is incorrect";
         }
         if (Objects.nonNull(logout)) {
-            errorMessage = " logout is success";
+            errorMessage = "    logout is success";
         }
         model.addAttribute("errorMessage", errorMessage);
         return "login";
     }
 
-    /**
-     * Method handler form logout.
-     *
-     * @param req  request
-     * @param resp response
-     * @return path for redirect
-     */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public final String logoutPage(@RequestParam(value = "name") final String name,
                                    final HttpServletRequest req,
                                    final HttpServletResponse resp) {
 
-        final Authentication auth = SecurityContextHolder.getContext()
-                .getAuthentication();
-
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (Objects.nonNull(auth) && Objects.equals(auth.getName(), name)) {
             new SecurityContextLogoutHandler().logout(req, resp, auth);
         }
