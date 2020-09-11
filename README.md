@@ -20,8 +20,9 @@ admin sees / edits all posts.
 1. make a clone of the project.
 2. to move between local base and heroku use application.properties file(local/heroku).
 3. if running locally, to create a forum database in postgres.
-4. click Start Class Main.
-5. go to http://localhost:8080.
+4. go to application.properties and to change a profile to "local". 
+5. click Start Class Main.
+6. go to http://localhost:8080.
 
 
 
